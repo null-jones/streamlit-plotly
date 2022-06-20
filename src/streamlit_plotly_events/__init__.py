@@ -148,3 +148,26 @@ if not _RELEASE:
         fig4, key="hover", click_event=False, hover_event=True
     )
     plot_name_holder4.write(f"Hovered Point: {clickedPoint4}")
+
+    st.subheader("Scatter Map Chart")
+    import pandas as pd
+
+    us_cities = pd.read_csv(
+        "https://raw.githubusercontent.com/plotly/datasets/master/us-cities-top-1k.csv"
+    )
+
+    fig = px.scatter_mapbox(
+        us_cities,
+        lat="lat",
+        lon="lon",
+        hover_name="City",
+        hover_data=["State", "Population"],
+        color_discrete_sequence=["fuchsia"],
+        zoom=3,
+        height=300,
+    )
+    fig.update_layout(mapbox_style="open-street-map")
+    plot_name_holder = st.empty()
+    clickedPoint0 = plotly_events(fig, key="scatter map")
+    plot_name_holder.write(f"Clicked Point: {clickedPoint0}")
+    st.write(us_cities.iloc[clickedPoint0[0]["pointNumber"]].astype(str))

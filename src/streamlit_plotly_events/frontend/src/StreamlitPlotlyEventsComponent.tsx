@@ -42,12 +42,14 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
       clickedPoints.push({
         x: arrayItem.x,
         y: arrayItem.y,
+        lat: arrayItem.lat,
+        lon: arrayItem.lon,
         curveNumber: arrayItem.curveNumber,
         pointNumber: arrayItem.pointNumber,
         pointIndex: arrayItem.pointIndex
       })
     });
-
+    
     // Return array as JSON to Streamlit
     Streamlit.setComponentValue(JSON.stringify(clickedPoints))
   }
