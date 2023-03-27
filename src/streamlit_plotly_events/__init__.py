@@ -1,6 +1,7 @@
 import os
-import streamlit.components.v1 as components
 from json import loads
+
+import streamlit.components.v1 as components
 
 # Create a _RELEASE constant. We'll set this to False while we're developing
 # the component, and True when we're ready to package and distribute it.
@@ -113,8 +114,9 @@ def plotly_events(
 # During development, we can run this just as we would any other Streamlit
 # app: `$ streamlit run src/streamlit_plotly_events/__init__.py`
 if not _RELEASE:
-    import streamlit as st
     import plotly.express as px
+    import plotly.graph_objects as go
+    import streamlit as st
 
     st.set_page_config(layout="wide")
 
@@ -148,3 +150,32 @@ if not _RELEASE:
         fig4, key="hover", click_event=False, hover_event=True
     )
     plot_name_holder4.write(f"Hovered Point: {clickedPoint4}")
+    st.subheader("# Plotly Heatmap with click Event and text")
+    z = [
+        [0.1, 0.3, 0.5, 0.7, 0.9],
+        [1, 0.8, 0.6, 0.4, 0.2],
+        [0.2, 0, 0.5, 0.7, 0.9],
+        [0.9, 0.8, 0.4, 0.2, 0],
+        [0.3, 0.4, 0.5, 0.7, 1],
+    ]
+
+    y = [
+        ["t", "a", "b", "j", "h"],
+        ["d", "d", "d", "k", "h"],
+        ["n", "b", "r", "b", "b"],
+        ["d", "t", "y", "m", "g"],
+        ["s", "q", "b", "b", "h"],
+    ]
+    fig5 = go.Figure()
+    fig5.add_trace(
+        go.Heatmap(
+            z=z,
+            texttemplate="%{text}",
+            text=y,
+            colorscale="viridis",
+            hovertemplate="%{text}<br>x: %{x}<br>y: %{y}<br>z: %{z}<extra></extra>",
+        )
+    )
+    plot_name_holder5 = st.empty()
+    clickedPoint5 = plotly_events(fig5, click_event=True, key="heatmap with text")
+    plot_name_holder5.write(f"Clicked Point: {clickedPoint5}")
