@@ -25,10 +25,10 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
         layout={plot_obj.layout}
         config={plot_obj.config}
         frames={plot_obj.frames}
-        onClick={click_event ? this.plotlyEventHandler : function(){}}
-        onSelected={select_event ? this.plotlyEventHandler : function(){}}
-        onHover={hover_event ? this.plotlyEventHandler : function(){}}
-        style={{width: override_width, height: override_height}}
+        onClick={click_event ? this.plotlyEventHandler : function () { }}
+        onSelected={select_event ? this.plotlyEventHandler : function () { }}
+        onHover={hover_event ? this.plotlyEventHandler : function () { }}
+        style={{ width: override_width, height: override_height }}
         className="stPlotlyChart"
       />
     )
