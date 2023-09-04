@@ -17,6 +17,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
     const click_event = this.props.args["click_event"];
     const select_event = this.props.args["select_event"];
     const hover_event = this.props.args["hover_event"];
+    
 
     Streamlit.setFrameHeight(override_height);
     return (
@@ -36,16 +37,22 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
 
   /** Click handler for plot. */
   private plotlyEventHandler = (data: any) => {
+    const return_fields = this.props.args["return_fields"];
+    
     // Build array of points to return
     var clickedPoints: Array<any> = [];
     data.points.forEach(function (arrayItem: any) {
-      clickedPoints.push({
-        x: arrayItem.x,
-        y: arrayItem.y,
-        curveNumber: arrayItem.curveNumber,
-        pointNumber: arrayItem.pointNumber,
-        pointIndex: arrayItem.pointIndex
-      })
+      let clickedPoint: any = {};
+      clickedPoint.x = arrayItem.x;
+      clickedPoint.y = arrayItem.y;
+      clickedPoint.pointNumber = arrayItem.pointNumber;
+      clickedPoint.pointIndex = arrayItem.pointIndex;
+      clickedPoint.curveNumber = arrayItem.curveNumber;
+      if (return_fields){
+        clickedPoint.customdata = arrayItem.customdata;
+      }
+
+      clickedPoints.push(clickedPoint);
     });
 
     // Return array as JSON to Streamlit
