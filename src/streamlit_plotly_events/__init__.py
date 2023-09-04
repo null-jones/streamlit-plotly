@@ -44,6 +44,7 @@ else:
 # `declare_component` and call it done. The wrapper allows us to customize
 # our component's API: we can pre-process its input args, post-process its
 # output value, and add a docstring for users.
+# Note: graph data must be deterministic, otherwise the event will return empty
 def plotly_events(
     plot_fig,
     click_event=True,
