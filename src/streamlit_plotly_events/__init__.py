@@ -1,6 +1,6 @@
 import os
 import streamlit.components.v1 as components
-from json import loads
+from json import loads, dumps
 
 # Create a _RELEASE constant. We'll set this to False while we're developing
 # the component, and True when we're ready to package and distribute it.
@@ -51,6 +51,7 @@ def plotly_events(
     hover_event=False,
     override_height=450,
     override_width="100%",
+    config={},
     key=None,
 ):
     """Create a new instance of "plotly_events".
@@ -69,6 +70,8 @@ def plotly_events(
         Integer to override component height.  Defaults to 450 (px)
     override_width: string, default: '100%'
         String (or integer) to override width.  Defaults to 100% (whole width of iframe)
+    config: dictionary, default: {}
+        Plotly config dictionary. Defaults to {}
     key: str or None
         An optional key that uniquely identifies this component. If this is
         None, and the component's arguments are changed, the component will
@@ -98,6 +101,7 @@ def plotly_events(
         plot_obj=plot_fig.to_json(),
         override_height=override_height,
         override_width=override_width,
+        config=dumps(config),
         key=key,
         click_event=click_event,
         select_event=select_event,
@@ -121,7 +125,7 @@ if not _RELEASE:
     st.subheader("Plotly Line Chart")
     fig = px.line(x=[0, 1, 2, 3], y=[0, 1, 2, 3])
     plot_name_holder = st.empty()
-    clickedPoint = plotly_events(fig, key="line")
+    clickedPoint = plotly_events(fig, key="line", config={"displayModeBar": True})
     plot_name_holder.write(f"Clicked Point: {clickedPoint}")
 
     # Here we add columns to check auto-resize/etc

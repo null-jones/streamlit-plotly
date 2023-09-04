@@ -10,6 +10,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
   public render = (): ReactNode => {
     // Pull Plotly object from args and parse
     const plot_obj = JSON.parse(this.props.args["plot_obj"]);
+    const config = JSON.parse(this.props.args["config"]);
     const override_height = this.props.args["override_height"];
     const override_width = this.props.args["override_width"];
 
@@ -23,7 +24,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase {
       <Plot
         data={plot_obj.data}
         layout={plot_obj.layout}
-        config={plot_obj.config}
+        config={config}
         frames={plot_obj.frames}
         onClick={click_event ? this.plotlyEventHandler : function(){}}
         onSelected={select_event ? this.plotlyEventHandler : function(){}}
