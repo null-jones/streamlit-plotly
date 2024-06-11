@@ -6,7 +6,7 @@ from json import loads
 # the component, and True when we're ready to package and distribute it.
 # (This is, of course, optional - there are innumerable ways to manage your
 # release process.)
-_RELEASE = False
+_RELEASE = True
 
 # Declare a Streamlit component. `declare_component` returns a function
 # that is used to create instances of the component. We're naming this
@@ -47,6 +47,7 @@ else:
 def plotly_events(
     plot_fig,
     click_event=True,
+    with_z=False,
     select_event=False,
     hover_event=False,
     override_height=450,
@@ -85,8 +86,9 @@ def plotly_events(
 
         Format of dict:
             {
-                x: int (x value of point),
-                y: int (y value of point),
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
                 curveNumber: (index of curve),
                 pointNumber: (index of selected point),
                 pointIndex: (index of selected point)
@@ -100,6 +102,7 @@ def plotly_events(
         override_width=override_width,
         key=key,
         click_event=click_event,
+        with_z=with_z,
         select_event=select_event,
         hover_event=hover_event,
         default="[]",  # Default return empty JSON list
@@ -126,7 +129,7 @@ if not _RELEASE:
 
     # Here we add columns to check auto-resize/etc
     st.subheader("Plotly Bar Chart (With columns)")
-    _, c2, _ = st.beta_columns((1, 6, 1))
+    _, c2, _ = st.columns((1, 6, 1))
     with c2:
         fig2 = px.bar(x=[0, 1, 2, 3], y=[0, 1, 2, 3])
         plot_name_holder2 = st.empty()

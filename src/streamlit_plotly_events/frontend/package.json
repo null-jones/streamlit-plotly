@@ -16,7 +16,9 @@
     "react-plotly.js": "^2.4.0",
     "react-scripts": "3.4.1",
     "streamlit-component-lib": "^1.2.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.8.3",
+    "@types/babel__core": "7.1.18",
+    "@types/babel__traverse": "7.14.2"
   },
   "devDependencies": {
     "@types/plotly.js": "^1.50.16",
