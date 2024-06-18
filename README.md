@@ -34,23 +34,21 @@ selected_points = plotly_events(fig, click_event=False, hover_event=True)
 What the component returns:
 ```
 Returns
-    -------
-    list of dict
-        List of dictionaries containing point details (in case multiple overlapping
-        points have been clicked).
+-------
+list of dict
+    List of dictionaries containing point details (in case multiple overlapping points have been clicked).
 
-        Details can be found here:
-            https://plotly.com/javascript/plotlyjs-events/#event-data
+    Details can be found here:
+        https://plotly.com/javascript/plotlyjs-events/#event-data
 
-        Format of dict:
-            {
-                x: float (x value of point),
-                y: float (y value of point),
-                z: float (z value of point), # optional enabled using with_z
-                curveNumber: (index of curve),
-                pointNumber: (index of selected point),
-                pointIndex: (index of selected point)
-            }
+    Format of dict:
+        {
+            x: int (x value of point),
+            y: int (y value of point),
+            curveNumber: (index of curve),
+            pointNumber: (index of selected point),
+            pointIndex: (index of selected point)
+        }
 
 ```
 

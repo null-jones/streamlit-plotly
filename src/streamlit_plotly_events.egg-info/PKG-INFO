@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: streamlit-plotly-events
+Version: 0.0.6
+Summary: Plotly chart component for Streamlit that also allows for events to bubble back up to Streamlit.
+Home-page: https://github.com/null-jones/streamlit-plotly-events
+Author: Ellie Jones
+Author-email: ellie@altaml.com
+Requires-Python: >=3.6
+Description-Content-Type: text/plain
+License-File: LICENSE
+Requires-Dist: streamlit>=0.63
+Requires-Dist: plotly>=4.14.3
+
+Plotly chart component for Streamlit that also allows for events to bubble back up to Streamlit.

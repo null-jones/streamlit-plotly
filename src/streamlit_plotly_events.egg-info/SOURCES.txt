@@ -1,0 +1,10 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.py
+src/streamlit_plotly_events/__init__.py
+src/streamlit_plotly_events.egg-info/PKG-INFO
+src/streamlit_plotly_events.egg-info/SOURCES.txt
+src/streamlit_plotly_events.egg-info/dependency_links.txt
+src/streamlit_plotly_events.egg-info/requires.txt
+src/streamlit_plotly_events.egg-info/top_level.txt
