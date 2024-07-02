@@ -110,11 +110,14 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
             z: currentClickedPoint.z,
           }
         })
+      } else {
+        needToUpdate = false
       }
+
       // console.log('state point: ', this.state.clickedPoints)
       // console.log('clicked point: ',  currentClickedPoint.x)
       if (plot_clicked_point && needToUpdate === true) {
-        needToUpdate = false
+
         const getPoint = data.points[0]
         const traceIndex = getPoint.curveNumber
         const pointIndex = getPoint.pointNumber
@@ -156,9 +159,9 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           name: 'Clicked Point',
           text: ['Clicked Point'],
           hovertemplate: '<b>%{text}</b><br>'
-          + `<b>x: ${getPoint.x.toFixed(3)}</b><br>`
-          + `<b>y: ${getPoint.y.toFixed(3)}</b><br>`
-          + `<b>z: ${getPoint.z.toFixed(3)}</b><extra></extra>`
+            + `<b>x: ${getPoint.x.toFixed(3)}</b><br>`
+            + `<b>y: ${getPoint.y.toFixed(3)}</b><br>`
+            + `<b>z: ${getPoint.z.toFixed(3)}</b><extra></extra>`
 
         };
 
