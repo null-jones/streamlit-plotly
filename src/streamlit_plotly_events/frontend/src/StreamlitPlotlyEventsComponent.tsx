@@ -310,7 +310,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       mode: 'lines',
       line: {
         color: 'blue',
-        width: 4,
+        width: this.state.measureLineWidth,
       },
       type: 'scatter3d',
       name: 'Distance Z',
