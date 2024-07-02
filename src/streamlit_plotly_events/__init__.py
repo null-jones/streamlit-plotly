@@ -55,7 +55,8 @@ def plotly_events(
     key=None,
     plot_clicked_point: bool = False,
     clicked_point_size: float = 0.0,
-    measure_mode: bool = False
+    measure_mode: bool = False,
+    measure_line_width: float = 4.0,
 ):
     """Create a new instance of "plotly_events".
 
@@ -112,6 +113,7 @@ def plotly_events(
         plot_clicked_point=plot_clicked_point,
         clicked_point_size=clicked_point_size,
         measure_mode = measure_mode,
+        measure_line_width=measure_line_width,
     )
 
     # Parse component_value since it's JSON and return to Streamlit
