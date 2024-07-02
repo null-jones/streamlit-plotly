@@ -12,6 +12,7 @@ interface MyState {
   clickedPoints: { x: number; y: number; z: number };
   measureMode: boolean;
   measurePoints: any[];
+  measureLineWidth: number;
 }
 
 class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
@@ -22,7 +23,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     clickedPoints: { x: 0.0, y: 0.0, z: 0.0 },
     measureMode: false,
     measurePoints: [],
-
+    measureLineWidth: 0.0
   };
 
   // init the component state when first starting it
@@ -30,6 +31,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
   componentDidMount() {
     let plot_obj = JSON.parse(this.props.args["plot_obj"])
     let measure_mode: boolean = this.props.args['measure_mode']
+    let measure_line_width: number = this.props.args['measure_line_width']
     this.setState({
       data: plot_obj.data,
       layout: { uirevision: 'constant' },
@@ -40,6 +42,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       },
       measureMode: measure_mode,
       measurePoints: [],
+      measureLineWidth: measure_line_width
     });
   }
 
@@ -49,6 +52,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     const override_height = this.props.args["override_height"];
     const override_width = this.props.args["override_width"];
     const plotClickedPoint: boolean = this.props.args['plot_clicked_point']
+    const measureLineWidth: number = this.props.args['measure_line_width']
     /*Get the current point size of the chart we are plotting to draw the extra clicked point
       with respect to the scale of the plotted points
     */
@@ -254,7 +258,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       mode: 'lines',
       line: {
         color: 'purple',
-        width: 4,
+        width: this.state.measureLineWidth,
       },
       type: 'scatter3d',
       name: 'Distance',
@@ -274,7 +278,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       mode: 'lines',
       line: {
         color: 'red',
-        width: 4,
+        width: this.state.measureLineWidth,
       },
       type: 'scatter3d',
       name: 'Distance X',
@@ -290,7 +294,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       mode: 'lines',
       line: {
         color: 'green',
-        width: 4,
+        width: this.state.measureLineWidth,
       },
       type: 'scatter3d',
       name: 'Distance Y',
