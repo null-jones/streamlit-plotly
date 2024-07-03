@@ -32,9 +32,12 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     let plot_obj = JSON.parse(this.props.args["plot_obj"])
     let measure_mode: boolean = this.props.args['measure_mode']
     let measure_line_width: number = this.props.args['measure_line_width']
+    
+    plot_obj.layout.uirevision = 'true'
+    console.log('current plot layout: ', plot_obj.layout)
     this.setState({
       data: plot_obj.data,
-      layout: { uirevision: 'constant' },
+      layout: plot_obj.layout,
       clickedPoints: {
         x: 0,
         y: 0,
@@ -310,7 +313,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       mode: 'lines',
       line: {
         color: 'blue',
-        width: this.state.measureLineWidth,
+        width: 4,
       },
       type: 'scatter3d',
       name: 'Distance Z',
