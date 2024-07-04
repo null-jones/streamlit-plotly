@@ -179,7 +179,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           clickPointPlot.marker.size = 5.0
         }
 
-        
+
         // calculate measure points and plot them on the chart
         if (this.state.measureMode === true) {
           // let measurePoints = this.state.measurePoints
@@ -245,13 +245,13 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
             measurePointsX: this.state.measurePoints.map(points => points.x).filter(measurePointsX => measurePointsX.length === 1).flat(),
             measurePointsY: this.state.measurePoints.map(points => points.y).filter(measurePointsY => measurePointsY.length === 1).flat(),
             measurePointsZ: this.state.measurePoints.map(points => points.z).filter(measurePointsZ => measurePointsZ.length === 1).flat(),
-            dx: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[0].toFixed(3),
-            dy: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[1].toFixed(3),
-            dz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[2].toFixed(3),
-            dxyz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[3].toFixed(3),
-            dxy: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[4].toFixed(3),
-            dxz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[5].toFixed(3),
-            dyz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[6].toFixed(3),
+            dx: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[0].toFixed(3)),
+            dy: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[1].toFixed(3)),
+            dz: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[2].toFixed(3)),
+            dxyz: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[3].toFixed(3)),
+            dxy: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[4].toFixed(3)),
+            dxz: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[5].toFixed(3)),
+            dyz: this.state.measurePoints.length === 1 ? 0 : parseFloat(measurePlot.distances[6].toFixed(3)),
           })
         }
 
