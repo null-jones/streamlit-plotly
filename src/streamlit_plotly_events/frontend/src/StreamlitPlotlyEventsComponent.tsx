@@ -32,7 +32,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     let plot_obj = JSON.parse(this.props.args["plot_obj"])
     let measure_mode: boolean = this.props.args['measure_mode']
     let measure_line_width: number = this.props.args['measure_line_width']
-    
+
     plot_obj.layout.uirevision = 'true'
     console.log('current plot layout: ', plot_obj.layout)
     this.setState({
@@ -121,8 +121,8 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
         needToUpdate = false
       }
 
-      // console.log('state point: ', this.state.clickedPoints)
-      // console.log('clicked point: ',  currentClickedPoint.x)
+      // measurePlot is used within the lifetime of this function
+      let measurePlot: any = {}
       if (plot_clicked_point && needToUpdate === true) {
 
         const getPoint = data.points[0]
@@ -179,7 +179,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           clickPointPlot.marker.size = 5.0
         }
 
-
+        
         // calculate measure points and plot them on the chart
         if (this.state.measureMode === true) {
           // let measurePoints = this.state.measurePoints
@@ -195,8 +195,8 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           if (this.state.measurePoints.length === 2) {
             const measurePoints = this.state.measurePoints
 
-            const measurePlot = this.createMeasureLine(measurePoints)
-            measurePoints.push(...measurePlot)
+            measurePlot = this.createMeasureLine(measurePoints)
+            measurePoints.push(...measurePlot.lines)
           }
 
           console.log('measure points: ', this.state.measurePoints)
@@ -236,6 +236,24 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
             });
           }
         });
+
+        // Add measure points to return when in measure mode
+        if (this.state.measureMode === true) {
+          console.log('measurepoint length: ', this.state.measurePoints.length)
+          clickedPoints.push({
+            // x: this.state.measurePoints.map(pointX => pointX.x)
+            measurePointsX: this.state.measurePoints.map(points => points.x).filter(measurePointsX => measurePointsX.length === 1).flat(),
+            measurePointsY: this.state.measurePoints.map(points => points.y).filter(measurePointsY => measurePointsY.length === 1).flat(),
+            measurePointsZ: this.state.measurePoints.map(points => points.z).filter(measurePointsZ => measurePointsZ.length === 1).flat(),
+            dx: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[0].toFixed(3),
+            dy: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[1].toFixed(3),
+            dz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[2].toFixed(3),
+            dxyz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[3].toFixed(3),
+            dxy: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[4].toFixed(3),
+            dxz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[5].toFixed(3),
+            dyz: this.state.measurePoints.length === 1 ? 0 : measurePlot.distances[6].toFixed(3),
+          })
+        }
 
         // Return array as JSON to Streamlit
         Streamlit.setComponentValue(JSON.stringify(clickedPoints));
@@ -321,7 +339,10 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       hovertemplate: `<b>Measured distance X: ${dz.toFixed(3)}m</b><extra></extra>`
     };
     return (
-      [linexyz, linex, liney, linez]
+      {
+        lines: [linexyz, linex, liney, linez],
+        distances: [dx, dy, dz, dxyz, dxy, dxz, dyz]
+      }
     )
   }
   private updatePlotState = (plot_data: any): void => {
