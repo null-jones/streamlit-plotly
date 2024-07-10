@@ -8,3 +8,14 @@ src/streamlit_plotly_events.egg-info/SOURCES.txt
 src/streamlit_plotly_events.egg-info/dependency_links.txt
 src/streamlit_plotly_events.egg-info/requires.txt
 src/streamlit_plotly_events.egg-info/top_level.txt
+src/streamlit_plotly_events/frontend/build/asset-manifest.json
+src/streamlit_plotly_events/frontend/build/index.html
+src/streamlit_plotly_events/frontend/build/precache-manifest.ee925ac68621088b518d13d45367f5fb.js
+src/streamlit_plotly_events/frontend/build/service-worker.js
+src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js
+src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js.LICENSE.txt
+src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js.map
+src/streamlit_plotly_events/frontend/build/static/js/main.45b4700a.chunk.js
+src/streamlit_plotly_events/frontend/build/static/js/main.45b4700a.chunk.js.map
+src/streamlit_plotly_events/frontend/build/static/js/runtime-main.44d30fc2.js
+src/streamlit_plotly_events/frontend/build/static/js/runtime-main.44d30fc2.js.map

@@ -53,6 +53,10 @@ def plotly_events(
     override_height=450,
     override_width="100%",
     key=None,
+    plot_clicked_point: bool = False,
+    clicked_point_size: float = 0.0,
+    measure_mode: bool = False,
+    measure_line_width: float = 4.0,
 ):
     """Create a new instance of "plotly_events".
 
@@ -74,6 +78,16 @@ def plotly_events(
         An optional key that uniquely identifies this component. If this is
         None, and the component's arguments are changed, the component will
         be re-mounted in the Streamlit frontend and lose its current state.
+    plot_clicked_point: bool
+        An optional key if you want the clicked point on the chart to have a red point drawn
+        to indicate where you clicked (Stable for Scatter 3d plots not yet tested on other types)
+    clicked_point_size: float
+        What size to plot the clicked point, will work make a difference when plot_clicked_point is True
+    measure_mode: bool
+        Plot measurements after clicking 2 points on the chart, will modify the return value of the component
+        Measurement and plotting is done is in component space so no need to rerun
+    measure_line_width: float
+        What line width to plot when measurement is done,
 
     Returns
     -------
@@ -94,6 +108,28 @@ def plotly_events(
                 pointIndex: (index of selected point)
             }
 
+        If measurement is enabled:
+            {
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
+                curveNumber: (index of curve),
+                pointNumber: (index of selected point),
+                pointIndex: (index of selected point)
+            },
+            {
+                measurePointsX: (list of measurement points x value),
+                measurePointsY: (list of measurement points y value),
+                measurePointsZ: (list of measurement poitns z value),
+                dx: (delta x of measurement points, 0 when only one point is clicked),
+                dy: (delta y of measurement points, 0 when only one point is clicked),
+                dz: (delta z of measurement points, 0 when only one point is clicked)
+                dxyz: (delta xyz of measurement points, 0 when only one points is clicked)
+                dxy: (delta xy of measurement points, 0 when only one point is clicked),
+                dxz: (delta xz of measurement points, 0 when only one point is clicked),
+                dyz: (delta yz of measurement points, 0 when only one point is clicked)
+            }
+
     """
     # kwargs will be exposed to frontend in "args"
     component_value = _component_func(
@@ -105,7 +141,11 @@ def plotly_events(
         with_z=with_z,
         select_event=select_event,
         hover_event=hover_event,
-        default="[]",  # Default return empty JSON list
+        default="[]",
+        plot_clicked_point=plot_clicked_point,
+        clicked_point_size=clicked_point_size,
+        measure_mode=measure_mode,
+        measure_line_width=measure_line_width,
     )
 
     # Parse component_value since it's JSON and return to Streamlit
