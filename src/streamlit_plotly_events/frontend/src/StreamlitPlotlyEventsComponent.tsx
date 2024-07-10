@@ -13,6 +13,7 @@ interface MyState {
   measureMode: boolean;
   measurePoints: any[];
   measureLineWidth: number;
+  camera?: number[]
 }
 
 class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
@@ -65,6 +66,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     const select_event = this.props.args["select_event"];
     const hover_event = this.props.args["hover_event"];
     const with_z = this.props.args["with_z"];
+    const get_relayout = this.props.args['get_relayout']
 
     Streamlit.setFrameHeight(override_height);
     return (
@@ -76,6 +78,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
         onClick={click_event ? this.plotlyEventHandler(with_z, plot_obj, plotClickedPoint, clickedPointSize) : undefined}
         onSelected={select_event ? this.plotlyEventHandler(with_z) : undefined}
         onHover={hover_event ? this.plotlyEventHandler(with_z) : undefined}
+        onRelayout={get_relayout? this.relayoutEventHandler: undefined}
         style={{ width: override_width, height: override_height }}
         className="stPlotlyChart"
       />
@@ -255,6 +258,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           })
         }
 
+
         // Return array as JSON to Streamlit
         Streamlit.setComponentValue(JSON.stringify(clickedPoints));
       }
@@ -353,6 +357,29 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       // frames: this.state.frames,
 
     })
+  }
+  private relayoutEventHandler = (eventData: any): void => {
+    interface cameraPostionObject {
+      cameraLayout: {
+        x: number
+        y: number
+        z: number
+      }
+    }
+    console.log('relayout callback')
+    if (eventData && eventData['scene.camera']) {
+      const eye = eventData['scene.camera'].eye
+      console.log('current eye', eye)
+      const cameraPostion: cameraPostionObject = {
+        cameraLayout: {
+          x: eye.x,
+          y: eye.y,
+          z: eye.z
+        }
+
+      }
+      Streamlit.setComponentValue(JSON.stringify(cameraPostion))
+    } 
   }
 }
 

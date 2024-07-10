@@ -6,7 +6,7 @@ from json import loads
 # the component, and True when we're ready to package and distribute it.
 # (This is, of course, optional - there are innumerable ways to manage your
 # release process.)
-_RELEASE = True
+_RELEASE = False
 
 # Declare a Streamlit component. `declare_component` returns a function
 # that is used to create instances of the component. We're naming this
@@ -57,6 +57,7 @@ def plotly_events(
     clicked_point_size: float = 0.0,
     measure_mode: bool = False,
     measure_line_width: float = 4.0,
+    get_relayout: bool = False,
 ):
     """Create a new instance of "plotly_events".
 
@@ -146,6 +147,7 @@ def plotly_events(
         clicked_point_size=clicked_point_size,
         measure_mode=measure_mode,
         measure_line_width=measure_line_width,
+        get_relayout=get_relayout
     )
 
     # Parse component_value since it's JSON and return to Streamlit
