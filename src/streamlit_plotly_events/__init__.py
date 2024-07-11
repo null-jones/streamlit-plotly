@@ -57,6 +57,7 @@ def plotly_events(
     clicked_point_size: float = 0.0,
     measure_mode: bool = False,
     measure_line_width: float = 4.0,
+    get_relayout: bool = False,
 ):
     """Create a new instance of "plotly_events".
 
@@ -129,6 +130,15 @@ def plotly_events(
                 dxz: (delta xz of measurement points, 0 when only one point is clicked),
                 dyz: (delta yz of measurement points, 0 when only one point is clicked)
             }
+        If get_relayout is enabled, additional returns will happen when the chart is moved around
+        {
+            cameraLayout: {
+                x: float (x camera position)
+                y: float (y camera position)
+                z: float (z camera position)
+            }
+        }
+        different dictionaries will be returned so you need to handle them
 
     """
     # kwargs will be exposed to frontend in "args"
@@ -146,6 +156,7 @@ def plotly_events(
         clicked_point_size=clicked_point_size,
         measure_mode=measure_mode,
         measure_line_width=measure_line_width,
+        get_relayout=get_relayout
     )
 
     # Parse component_value since it's JSON and return to Streamlit

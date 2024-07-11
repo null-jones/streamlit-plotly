@@ -13,6 +13,8 @@ interface MyState {
   measureMode: boolean;
   measurePoints: any[];
   measureLineWidth: number;
+  camera?: number[]
+  deferInitialLayoutReturn?: boolean
 }
 
 class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
@@ -45,7 +47,8 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       },
       measureMode: measure_mode,
       measurePoints: [],
-      measureLineWidth: measure_line_width
+      measureLineWidth: measure_line_width,
+      deferInitialLayoutReturn: true
     });
   }
 
@@ -65,6 +68,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     const select_event = this.props.args["select_event"];
     const hover_event = this.props.args["hover_event"];
     const with_z = this.props.args["with_z"];
+    const get_relayout = this.props.args['get_relayout']
 
     Streamlit.setFrameHeight(override_height);
     return (
@@ -76,6 +80,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
         onClick={click_event ? this.plotlyEventHandler(with_z, plot_obj, plotClickedPoint, clickedPointSize) : undefined}
         onSelected={select_event ? this.plotlyEventHandler(with_z) : undefined}
         onHover={hover_event ? this.plotlyEventHandler(with_z) : undefined}
+        onRelayout={get_relayout ? this.relayoutEventHandler : undefined}
         style={{ width: override_width, height: override_height }}
         className="stPlotlyChart"
       />
@@ -209,7 +214,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
         else {
           plot_obj.data.push(clickPointPlot)
         }
-        console.log('plotting using: ', plot_obj)
+        // console.log('plotting using: ', plot_obj)
         this.updatePlotState(plot_obj)
       }
 
@@ -255,7 +260,9 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           })
         }
 
+
         // Return array as JSON to Streamlit
+        console.log('Updating clicked point')
         Streamlit.setComponentValue(JSON.stringify(clickedPoints));
       }
 
@@ -353,6 +360,41 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       // frames: this.state.frames,
 
     })
+  }
+  private relayoutEventHandler = (eventData: any): void => {
+    interface cameraPostionObject {
+      cameraLayout: {
+        x: number
+        y: number
+        z: number
+      }
+    }
+    // console.log('relayout callback')
+    if (eventData && eventData['scene.camera']) {
+      const eye = eventData['scene.camera'].eye
+      console.log('current eye', eye)
+      const cameraPostion: cameraPostionObject = {
+        cameraLayout: {
+          x: eye.x,
+          y: eye.y,
+          z: eye.z
+        }
+
+      }
+      // defer the initial state return because the return value from
+      // the component to streamlit will be override by the layout return value
+      // when we click on a point the first time the chart is initialized
+
+      // console.log('relayout return')
+      if (this.state.deferInitialLayoutReturn === true) {
+        console.log('deferring layout return first time')
+        this.state.deferInitialLayoutReturn = false
+      } else {
+        console.log('layout return')
+        Streamlit.setComponentValue(JSON.stringify(cameraPostion))
+      }
+
+    }
   }
 }
 
