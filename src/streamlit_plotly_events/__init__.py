@@ -130,6 +130,15 @@ def plotly_events(
                 dxz: (delta xz of measurement points, 0 when only one point is clicked),
                 dyz: (delta yz of measurement points, 0 when only one point is clicked)
             }
+        If get_relayout is enabled, additional returns will happen when the chart is moved around
+        {
+            cameraLayout: {
+                x: float (x camera position)
+                y: float (y camera position)
+                z: float (z camera position)
+            }
+        }
+        different dictionaries will be returned so you need to handle them
 
     """
     # kwargs will be exposed to frontend in "args"
