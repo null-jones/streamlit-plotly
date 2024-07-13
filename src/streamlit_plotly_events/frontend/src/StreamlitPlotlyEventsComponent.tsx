@@ -17,6 +17,14 @@ interface MyState {
   deferInitialLayoutReturn?: boolean
 }
 
+interface cameraPostionObject {
+  cameraLayout: {
+    x: number
+    y: number
+    z: number
+  }
+}
+
 class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
   // Create state for points
   state: MyState = {
@@ -27,6 +35,8 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     measurePoints: [],
     measureLineWidth: 0.0
   };
+  private isProcessing: boolean = false;
+  private processingTimeout: NodeJS.Timeout | null = null;
 
   // init the component state when first starting it
   // make the layout constant across updates
@@ -58,7 +68,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     const override_height = this.props.args["override_height"];
     const override_width = this.props.args["override_width"];
     const plotClickedPoint: boolean = this.props.args['plot_clicked_point']
-    const measureLineWidth: number = this.props.args['measure_line_width']
+    // const measureLineWidth: number = this.props.args['measure_line_width']
     /*Get the current point size of the chart we are plotting to draw the extra clicked point
       with respect to the scale of the plotted points
     */
@@ -92,19 +102,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
 
     // console.log('pressed on point')
     return (data: any) => {
-      const getCircularReplacer = () => {
-        const seen = new WeakSet();
-        return (key: string, value: any) => {
-          if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-              return '[Circular]';
-            }
-            seen.add(value);
-          }
-          return value;
-        };
-      };
-      // JSON.parse(data.points[0])
+   
       // console.log('pressed on point', JSON.stringify(data.points[0], getCircularReplacer(), 2))
       // console.log('current plot object', plot_obj)
       let currentClickedPoint = data.points[0]
@@ -131,8 +129,8 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       if (plot_clicked_point && needToUpdate === true) {
 
         const getPoint = data.points[0]
-        const traceIndex = getPoint.curveNumber
-        const pointIndex = getPoint.pointNumber
+        // const traceIndex = getPoint.curveNumber
+        // const pointIndex = getPoint.pointNumber
         console.log(`current getPoint:`, getPoint)
         // console.log('current point number:', pointIndex)
         // console.log('current trace number', traceIndex)
@@ -260,10 +258,9 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
           })
         }
 
-
         // Return array as JSON to Streamlit
         console.log('Updating clicked point')
-        Streamlit.setComponentValue(JSON.stringify(clickedPoints));
+        this.debouncedStreamlitReturn(JSON.stringify(clickedPoints));
       }
 
     };
@@ -362,13 +359,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     })
   }
   private relayoutEventHandler = (eventData: any): void => {
-    interface cameraPostionObject {
-      cameraLayout: {
-        x: number
-        y: number
-        z: number
-      }
-    }
+
     // console.log('relayout callback')
     if (eventData && eventData['scene.camera']) {
       const eye = eventData['scene.camera'].eye
@@ -386,16 +377,41 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
       // when we click on a point the first time the chart is initialized
 
       // console.log('relayout return')
-      if (this.state.deferInitialLayoutReturn === true) {
-        console.log('deferring layout return first time')
-        this.state.deferInitialLayoutReturn = false
-      } else {
-        console.log('layout return')
-        Streamlit.setComponentValue(JSON.stringify(cameraPostion))
-      }
+      // if (this.state.deferInitialLayoutReturn === true) {
+      //   console.log('deferring layout return first time')
+      //   this.state.deferInitialLayoutReturn = false
+      // } else {
+      //   console.log('layout return')
+      //   this.debouncedStreamlitReturn(JSON.stringify(cameraPostion))
+      // }
+      this.debouncedStreamlitReturn(JSON.stringify(cameraPostion))
 
     }
   }
+  private debouncedStreamlitReturn: (value: string) => void;
+  constructor(props: any) {
+    super(props);
+    this.debouncedStreamlitReturn = this.customLeadingDebounce((value: string) => {
+      Streamlit.setComponentValue(value);
+    }, 300);
+  }
+
+  private customLeadingDebounce = (func: (value: string) => void, wait: number) => {
+    return (value: string) => {
+      if (!this.isProcessing) {
+        this.isProcessing = true;
+        func(value);
+
+        if (this.processingTimeout) {
+          clearTimeout(this.processingTimeout);
+        }
+
+        this.processingTimeout = setTimeout(() => {
+          this.isProcessing = false;
+        }, wait);
+      }
+    };
+  };
 }
 
 export default withStreamlitConnection(StreamlitPlotlyEventsComponent);

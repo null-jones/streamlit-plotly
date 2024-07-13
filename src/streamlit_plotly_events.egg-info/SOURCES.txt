@@ -10,12 +10,12 @@ src/streamlit_plotly_events.egg-info/requires.txt
 src/streamlit_plotly_events.egg-info/top_level.txt
 src/streamlit_plotly_events/frontend/build/asset-manifest.json
 src/streamlit_plotly_events/frontend/build/index.html
-src/streamlit_plotly_events/frontend/build/precache-manifest.b35d89159f39b2f6b144595f6317bcdd.js
+src/streamlit_plotly_events/frontend/build/precache-manifest.73c82ebc749cad31f76721ccef17783d.js
 src/streamlit_plotly_events/frontend/build/service-worker.js
 src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js
 src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js.LICENSE.txt
 src/streamlit_plotly_events/frontend/build/static/js/2.9330ddf9.chunk.js.map
-src/streamlit_plotly_events/frontend/build/static/js/main.47564b5d.chunk.js
-src/streamlit_plotly_events/frontend/build/static/js/main.47564b5d.chunk.js.map
+src/streamlit_plotly_events/frontend/build/static/js/main.0d52cef4.chunk.js
+src/streamlit_plotly_events/frontend/build/static/js/main.0d52cef4.chunk.js.map
 src/streamlit_plotly_events/frontend/build/static/js/runtime-main.44d30fc2.js
 src/streamlit_plotly_events/frontend/build/static/js/runtime-main.44d30fc2.js.map
