@@ -393,7 +393,7 @@ class StreamlitPlotlyEventsComponent extends StreamlitComponentBase<MyState> {
     super(props);
     this.debouncedStreamlitReturn = this.customLeadingDebounce((value: string) => {
       Streamlit.setComponentValue(value);
-    }, 300);
+    }, 100);
   }
 
   private customLeadingDebounce = (func: (value: string) => void, wait: number) => {
