@@ -7,12 +7,12 @@ __pycache__/
 *$py.class
 
 # Distribution / packaging
-# build/
-# dist/
-# eggs/
-# .eggs/
-# *.egg-info/
-# *.egg
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
 
 # Unit test / coverage reports
 .coverage
