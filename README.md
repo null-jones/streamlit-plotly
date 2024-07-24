@@ -34,21 +34,56 @@ selected_points = plotly_events(fig, click_event=False, hover_event=True)
 What the component returns:
 ```
 Returns
--------
-list of dict
-    List of dictionaries containing point details (in case multiple overlapping points have been clicked).
+    -------
+    list of dict
+        List of dictionaries containing point details (in case multiple overlapping
+        points have been clicked).
 
-    Details can be found here:
-        https://plotly.com/javascript/plotlyjs-events/#event-data
+        Details can be found here:
+            https://plotly.com/javascript/plotlyjs-events/#event-data
 
-    Format of dict:
+        Format of dict:
+            {
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
+                curveNumber: (index of curve),
+                pointNumber: (index of selected point),
+                pointIndex: (index of selected point)
+            }
+
+        If measurement is enabled:
+            {
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
+                curveNumber: (index of curve),
+                pointNumber: (index of selected point),
+                pointIndex: (index of selected point)
+            },
+            {
+                measurePointsX: (list of measurement points x value),
+                measurePointsY: (list of measurement points y value),
+                measurePointsZ: (list of measurement poitns z value),
+                dx: (delta x of measurement points, 0 when only one point is clicked),
+                dy: (delta y of measurement points, 0 when only one point is clicked),
+                dz: (delta z of measurement points, 0 when only one point is clicked)
+                dxyz: (delta xyz of measurement points, 0 when only one points is clicked)
+                dxy: (delta xy of measurement points, 0 when only one point is clicked),
+                dxz: (delta xz of measurement points, 0 when only one point is clicked),
+                dyz: (delta yz of measurement points, 0 when only one point is clicked)
+            }
+        If get_relayout is enabled, additional returns will happen when the chart is moved around
         {
-            x: int (x value of point),
-            y: int (y value of point),
-            curveNumber: (index of curve),
-            pointNumber: (index of selected point),
-            pointIndex: (index of selected point)
+            cameraLayout: {
+                x: float (x camera position)
+                y: float (y camera position)
+                z: float (z camera position)
+            }
         }
+        different dictionaries will be returned so you need to handle them
+
+    
 
 ```
 

@@ -70,3 +70,6 @@ package-lock.json
 
 # Virtual Env
 env/*
+
+# example folder
+examples/

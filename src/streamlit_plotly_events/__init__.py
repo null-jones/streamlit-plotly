@@ -6,7 +6,7 @@ from json import loads
 # the component, and True when we're ready to package and distribute it.
 # (This is, of course, optional - there are innumerable ways to manage your
 # release process.)
-_RELEASE = False
+_RELEASE = True
 
 # Declare a Streamlit component. `declare_component` returns a function
 # that is used to create instances of the component. We're naming this
@@ -47,11 +47,17 @@ else:
 def plotly_events(
     plot_fig,
     click_event=True,
+    with_z=False,
     select_event=False,
     hover_event=False,
     override_height=450,
     override_width="100%",
     key=None,
+    plot_clicked_point: bool = False,
+    clicked_point_size: float = 0.0,
+    measure_mode: bool = False,
+    measure_line_width: float = 4.0,
+    get_relayout: bool = False,
 ):
     """Create a new instance of "plotly_events".
 
@@ -73,6 +79,16 @@ def plotly_events(
         An optional key that uniquely identifies this component. If this is
         None, and the component's arguments are changed, the component will
         be re-mounted in the Streamlit frontend and lose its current state.
+    plot_clicked_point: bool
+        An optional key if you want the clicked point on the chart to have a red point drawn
+        to indicate where you clicked (Stable for Scatter 3d plots not yet tested on other types)
+    clicked_point_size: float
+        What size to plot the clicked point, will work make a difference when plot_clicked_point is True
+    measure_mode: bool
+        Plot measurements after clicking 2 points on the chart, will modify the return value of the component
+        Measurement and plotting is done is in component space so no need to rerun
+    measure_line_width: float
+        What line width to plot when measurement is done,
 
     Returns
     -------
@@ -85,12 +101,44 @@ def plotly_events(
 
         Format of dict:
             {
-                x: int (x value of point),
-                y: int (y value of point),
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
                 curveNumber: (index of curve),
                 pointNumber: (index of selected point),
                 pointIndex: (index of selected point)
             }
+
+        If measurement is enabled:
+            {
+                x: float (x value of point),
+                y: float (y value of point),
+                z: float (z value of point), # optional enabled using with_z
+                curveNumber: (index of curve),
+                pointNumber: (index of selected point),
+                pointIndex: (index of selected point)
+            },
+            {
+                measurePointsX: (list of measurement points x value),
+                measurePointsY: (list of measurement points y value),
+                measurePointsZ: (list of measurement poitns z value),
+                dx: (delta x of measurement points, 0 when only one point is clicked),
+                dy: (delta y of measurement points, 0 when only one point is clicked),
+                dz: (delta z of measurement points, 0 when only one point is clicked)
+                dxyz: (delta xyz of measurement points, 0 when only one points is clicked)
+                dxy: (delta xy of measurement points, 0 when only one point is clicked),
+                dxz: (delta xz of measurement points, 0 when only one point is clicked),
+                dyz: (delta yz of measurement points, 0 when only one point is clicked)
+            }
+        If get_relayout is enabled, additional returns will happen when the chart is moved around
+        {
+            cameraLayout: {
+                x: float (x camera position)
+                y: float (y camera position)
+                z: float (z camera position)
+            }
+        }
+        different dictionaries will be returned so you need to handle them
 
     """
     # kwargs will be exposed to frontend in "args"
@@ -100,9 +148,15 @@ def plotly_events(
         override_width=override_width,
         key=key,
         click_event=click_event,
+        with_z=with_z,
         select_event=select_event,
         hover_event=hover_event,
-        default="[]",  # Default return empty JSON list
+        default="[]",
+        plot_clicked_point=plot_clicked_point,
+        clicked_point_size=clicked_point_size,
+        measure_mode=measure_mode,
+        measure_line_width=measure_line_width,
+        get_relayout=get_relayout
     )
 
     # Parse component_value since it's JSON and return to Streamlit
@@ -126,7 +180,7 @@ if not _RELEASE:
 
     # Here we add columns to check auto-resize/etc
     st.subheader("Plotly Bar Chart (With columns)")
-    _, c2, _ = st.beta_columns((1, 6, 1))
+    _, c2, _ = st.columns((1, 6, 1))
     with c2:
         fig2 = px.bar(x=[0, 1, 2, 3], y=[0, 1, 2, 3])
         plot_name_holder2 = st.empty()
